@@ -11,14 +11,3 @@ def lambda_handler(event,context):
         Subject=('AWS Servive List | ' + str(now.day) + ' ' + now.strftime("%B") + ', ' + str(now.year)),
         Message="It worked"
     )
-
-
-'''JSON Policy Document
-{
-    "Version": "2012-10-17",
-    "Statement": {
-        "Effect": "Allow",
-        "Action": "List",
-        "Resource": "*"
-    }
-}
