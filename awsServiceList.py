@@ -1,24 +1,23 @@
-import boto3
 import os
-import datetime
 import json
+import boto3
+import datetime
 
-def lambda_handler(event,context):
+def Lambda_Handler(event,context):
     client = boto3.client('sns')
     now = datetime.datetime.now()
-    print(serv_list()) #testing purposes
-    '''
+
     client.publish(
         TopicArn=(os.environ['TOPIC_ARN']),
         Subject=('AWS Servive List | ' + str(now.day) + ' ' + now.strftime("%B") + ', ' + str(now.year)),
-        Message=serv_list()
+        Message=ServiceList()
     )
-    '''
-def defauConvert(o):
+
+def Convert(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
 
-def serv_list():
+def ServiceList():
     response = {}
     ec2 = boto3.client('ec2')
     s3 = boto3.client('s3')
@@ -31,4 +30,4 @@ def serv_list():
     response['-------------------Lambda Functions-------------------'] = lam.list_functions()
     response['-------------------DynamoDB Tables-------------------'] = dynamo.list_tables()
     response['-------------------RDS-------------------'] = rds.describe_db_instances()
-    return (json.dumps(response, default=defauConvert, sort_keys=True, indent=4))
+    return (json.dumps(response, default=Convert, sort_keys=True, indent=4))
