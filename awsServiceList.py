@@ -1,6 +1,7 @@
 import boto3
 import os
 import datetime
+import json
 
 def lambda_handler(event,context):
     client = boto3.client('sns')
@@ -12,6 +13,10 @@ def lambda_handler(event,context):
         Message=serv_list()
     )
 
+def defauConvert(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
+
 def serv_list():
     ec2 = boto3.client('ec2')
     s3 = boto3.client('s3')
@@ -20,4 +25,4 @@ def serv_list():
     rds = boto3.client('rds')
 
     response = ec2.describe_instances()
-    return str(response)
+    return (json.dumps(response, default=defauConvert, sort_keys=True, indent=4))
